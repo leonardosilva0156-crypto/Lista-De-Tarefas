@@ -2,6 +2,7 @@ import { useState, useEffect, memo } from 'react'
 import Tarefas from './assets/Tarefa.jsx'
 
 
+
 function App() {
 const [tarefas, setTarefas] = useState([
   {
@@ -23,6 +24,18 @@ const [tarefas, setTarefas] = useState([
   }
 
 ])
+
+const [filtro, setFiltro] = useState('todas')
+
+const mudarFiltro = tarefas.filter((tarefa) => {
+  if(filtro === 'pendentes') {
+    return !tarefa.isCompleted
+  } else if(filtro === 'concluidas') {
+    return tarefa.isCompleted
+  } else {
+    return true
+  }
+})
 
 useEffect(() => {
   const tarefasSalvas = localStorage.getItem('tarefas')
@@ -54,7 +67,14 @@ const [tarefa, setTarefa] = useState('')
 
   return (
     <div>
+
       <h1>Lista de tarefas</h1>
+
+       <select value={filtro} onChange={(e) => setFiltro(e.target.value)}>
+        <option value="todas">Todas</option>
+        <option value="pendentes">Pendentes</option>
+        <option value="concluidas">Concluídas</option>
+      </select>
 
       <input 
         type="text" 
@@ -72,7 +92,8 @@ const [tarefa, setTarefa] = useState('')
       setTarefa('')
       }}>Adicionar Tarefa</button>
 
-      <Tarefas tarefas={tarefas} removeTarefa={remove}  />
+      
+    <Tarefas tarefas={tarefas} removeTarefa={remove}  />
 
     </div>
 
